@@ -52,3 +52,5 @@ app.get("/sensor/:id", function(req, res, next) {
 
 
 module.exports = app;
+
+app.listen();
