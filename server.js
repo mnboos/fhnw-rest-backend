@@ -1,34 +1,31 @@
 var express = require('express');
 var app = express();
-var router = express.Router({caseSensitive: true});
-
-var PORT = 4000;
 
 // ENABLE CORS
-router.use(function(req, res, next) {
+app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
 
-router.head("/", function(req, res, next) {
+app.head("/", function(req, res, next) {
     res.headers = req.headers;
     res.header("max-age", "0");
     res.send();
 });
 
-router.get("/", function(req, res, next) {
+app.get("/", function(req, res, next) {
     res.send('Hello World!');
 });
 
-router.get("/hello.world", function(req, res, next) {
+app.get("/hello.world", function(req, res, next) {
     var json = {
         blabla: 'good'
     };
     res.send(JSON.stringify(json));
 });
 
-router.get("/weather", function(req, res, next) {
+app.get("/weather", function(req, res, next) {
     var json = {
         weather: 'good'
     };
@@ -36,7 +33,7 @@ router.get("/weather", function(req, res, next) {
     res.send(JSON.stringify(json));
 });
 
-router.get("/Weather", function(req, res, next) {
+app.get("/Weather", function(req, res, next) {
     var json = {
         weather: 'bad'
     };
@@ -54,7 +51,4 @@ app.get("/sensor/:id", function(req, res, next) {
 });
 
 
-app.use(router);
-app.listen(PORT, function () {
-    console.log(`Listening on port ${PORT}`)
-});
+module.exports = app;
