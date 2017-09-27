@@ -1,0 +1,16 @@
+{
+  "name": "rb",
+  "version": "0.0.1",
+  "description": "Simple REST Backend",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Martin Boos <martin.boos@autexis.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.15.5",
+    "lodash": "^4.17.4",
+    "moment": "^2.18.1",
+    "request": "^2.81.0"
+  }
+}
