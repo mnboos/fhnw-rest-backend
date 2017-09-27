@@ -53,4 +53,4 @@ app.get("/sensor/:id", function(req, res, next) {
 
 module.exports = app;
 
-app.listen();
+app.listen(process.env.PORT || 4000);
