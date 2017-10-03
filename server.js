@@ -49,10 +49,11 @@ app.post("/xml2json", function(req, res, next) {
 
 function processXml(xml, res) {
     try {
+        let pythonpath = process.env.PORT ? 'D:\\Python34\\python.exe' : 'c:\\python27\\python.exe';
+
         var options = {
             mode: 'text',
-            // pythonPath: 'c:\\python27\\python.exe',
-            pythonPath: 'python.exe',
+            pythonPath: pythonpath,
             pythonOptions: ['-u'],
             scriptPath: '',
             args: ['value1', 'value2', 'value3']
