@@ -1,12 +1,28 @@
 var express = require('express');
 var app = express();
+var bodyParser = require('body-parser');
+var xslt = require('xslt');
+var fs = require('fs');
 
 // ENABLE CORS
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    bodyParser.json();
     next();
 });
+
+// parse various different custom JSON types as JSON
+app.use(bodyParser.json({ type: 'application/*+json' }))
+
+// parse some custom thing into a Buffer
+app.use(bodyParser.raw({ type: 'application/vnd.custom-type' }))
+
+// parse an HTML body into a string
+// app.use(bodyParser.text());
+app.use(bodyParser.text({ type: '*/xml' }));
+app.use(bodyParser.text({ type: 'text/*' }));
+
 
 app.head("/", function(req, res, next) {
     res.headers = req.headers;
@@ -17,6 +33,26 @@ app.head("/", function(req, res, next) {
 app.get("/", function(req, res, next) {
     res.send('Hello World!');
 });
+
+app.post("/xml2json", function(req, res, next) {
+    let result;
+    let xml = req.body;
+    if (xml) {
+        res.setHeader('Content-Type', req.header('Content-Type'));
+        result = processXml(xml);
+    } else {
+        res.setHeader('Content-Type', 'application/json');
+        result = {'content-type': req.header('Content-Type'), 'error': 'content-type is not xml or text'};
+    }
+    res.send(result);
+});
+
+function processXml(xml) {
+    const xsl = fs.readFileSync('./xml2json.xsl', {encoding: 'utf-8'});
+    console.log("xsl: ", xsl);
+    let outputXmlString = xslt(xml, xsl);
+    console.log("xml: ", outputXmlString);
+}
 
 app.get("/greet/:name", function(req, res, next) {
     res.send('Hello ' +req.params.name);
