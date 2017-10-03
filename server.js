@@ -1,8 +1,8 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-var xslt = require('xslt');
 var fs = require('fs');
+var PythonShell = require('python-shell');
 
 // ENABLE CORS
 app.use(function(req, res, next) {
@@ -39,19 +39,38 @@ app.post("/xml2json", function(req, res, next) {
     let xml = req.body;
     if (xml) {
         res.setHeader('Content-Type', req.header('Content-Type'));
-        result = processXml(xml);
+        result = processXml(xml, res);
     } else {
         res.setHeader('Content-Type', 'application/json');
         result = {'content-type': req.header('Content-Type'), 'error': 'content-type is not xml or text'};
     }
-    res.send(result);
+    // res.send(result);
 });
 
-function processXml(xml) {
-    const xsl = fs.readFileSync('./xml2json.xsl', {encoding: 'utf-8'});
-    console.log("xsl: ", xsl);
-    let outputXmlString = xslt(xml, xsl);
-    console.log("xml: ", outputXmlString);
+function processXml(xml, res) {
+    try {
+        var options = {
+            mode: 'text',
+            // pythonPath: 'c:\\python27\\python.exe',
+            pythonPath: 'python.exe',
+            pythonOptions: ['-u'],
+            scriptPath: '',
+            args: ['value1', 'value2', 'value3']
+        };
+
+    PythonShell.run('main.py', options, function (err) {
+        if (err) throw err;
+        console.log('finished');
+        res.send("finished");
+    });
+    } catch (err) {
+        res.send("executing python failed");
+    }
+
+    // const xsl = fs.readFileSync('./xml2json.xsl', {encoding: 'utf-8'});
+    // console.log("xsl: ", xsl);
+    // let outputXmlString = xslt(xml, xsl);
+    // console.log("xml: ", outputXmlString);
 }
 
 app.get("/greet/:name", function(req, res, next) {
