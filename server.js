@@ -34,6 +34,12 @@ app.get("/", function(req, res, next) {
     res.send('Hello World!');
 });
 
+app.get("/xsl", function(req, res, next) {
+    const xsl = fs.readFileSync('./xml2json.xsl', {encoding: 'utf-8'});
+    res.setHeader('Content-Type', 'application/xml');
+    res.send(xsl);
+});
+
 app.post("/xml2json", function(req, res, next) {
     let result;
     let xml = req.body;
