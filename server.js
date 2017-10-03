@@ -60,9 +60,12 @@ function processXml(xml, res) {
         };
 
     PythonShell.run('main.py', options, function (err) {
-        if (err) throw err;
-        console.log('finished');
-        res.send("finished");
+        if (err) {
+            res.send(err);
+        } else {
+            console.log('finished');
+            res.send("finished");
+        }
     });
     } catch (err) {
         res.send("executing python failed");
