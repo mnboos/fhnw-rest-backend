@@ -18,6 +18,10 @@ app.get("/", function(req, res, next) {
     res.send('Hello World!');
 });
 
+app.get("/greet/:name", function(req, res, next) {
+    res.send(`Hello ${req.params.name}!`);
+});
+
 app.get("/hello.world", function(req, res, next) {
     var json = {
         blabla: 'good'
